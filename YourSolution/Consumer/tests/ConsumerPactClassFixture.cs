@@ -10,8 +10,8 @@ namespace tests
         public IPactBuilder PactBuilder { get; set; }
         public IMockProviderService MockProviderService { get; private set; }
 
-        public int MockServerPort { get { return 9222; } }
-        public string MockProviderServiceBaseUri { get { return String.Format("http://localhost:{0}", MockServerPort); } }
+        public int MockServerPort => 9222;
+        public string MockProviderServiceBaseUri => $"http://localhost:{MockServerPort}";
 
         public ConsumerPactClassFixture()
         {
@@ -28,9 +28,27 @@ namespace tests
             MockProviderService = PactBuilder.MockService(MockServerPort);
         }
 
+
+        #region IDisposable Support
+        private bool _disposedValue = false; // To detect redundant calls
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (_disposedValue) return;
+            if (disposing)
+            {
+                PactBuilder.Build();
+            }
+
+            _disposedValue = true;
+        }
+
+        // This code added to correctly implement the disposable pattern.
         public void Dispose()
         {
-            PactBuilder.Build();
+            // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+            Dispose(true);
         }
+        #endregion
     }
 }
